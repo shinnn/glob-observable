@@ -1,0 +1,52 @@
+{
+  "name": "glob-observable",
+  "version": "0.1.0",
+  "description": "Observable-based glob",
+  "repository": "shinnn/glob-observable",
+  "author": "Shinnosuke Watanabe (https://github.com/shinnn)",
+  "scripts": {
+    "pretest": "eslint --fix --format=codeframe index.js test.js",
+    "test": "nyc node --throw-deprecation --harmony_async_await test.js"
+  },
+  "license": "MIT",
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "glob",
+    "file",
+    "files",
+    "pattern",
+    "match",
+    "matching",
+    "path",
+    "filepath",
+    "observable",
+    "subscribe",
+    "wrapper"
+  ],
+  "dependencies": {
+    "array-differ": "^1.0.0",
+    "assert-valid-glob-opts": "^0.1.0",
+    "fs.realpath": "^1.0.0",
+    "glob": "^7.1.1",
+    "graceful-fs": "^4.1.11",
+    "object-assign": "^4.1.1",
+    "pinkie-promise": "^2.0.1",
+    "zen-observable": "^0.4.0"
+  },
+  "devDependencies": {
+    "@shinnn/eslint-config-node-legacy": "^3.0.0",
+    "alpha-sort": "^2.0.0",
+    "eslint": "^3.14.1",
+    "lnfs": "^3.0.0",
+    "nyc": "^10.1.2",
+    "rmfr": "^1.0.2",
+    "slash": "^1.0.0",
+    "tape": "^4.6.3",
+    "unglobbable": "^0.0.0"
+  },
+  "eslintConfig": {
+    "extends": "@shinnn/node-legacy"
+  }
+}
