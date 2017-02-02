@@ -15,8 +15,6 @@ var makeAbs = require('glob/common.js').makeAbs;
 var objectAssign = require('object-assign');
 var Observable = require('zen-observable');
 
-global.Promise = require('pinkie-promise');
-
 module.exports = function globObservable(pattern, options) {
   return new Observable(function(observer) {
     if (typeof pattern !== 'string') {

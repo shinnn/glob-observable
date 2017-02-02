@@ -32,7 +32,6 @@
     "glob": "^7.1.1",
     "graceful-fs": "^4.1.11",
     "object-assign": "^4.1.1",
-    "pinkie-promise": "^2.0.1",
     "zen-observable": "^0.4.0"
   },
   "devDependencies": {
@@ -44,7 +43,7 @@
     "rmfr": "^1.0.2",
     "slash": "^1.0.0",
     "tape": "^4.6.3",
-    "unglobbable": "^0.0.0"
+    "unglobbable": "^1.0.0"
   },
   "eslintConfig": {
     "extends": "@shinnn/node-legacy"
