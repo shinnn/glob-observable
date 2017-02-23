@@ -4,43 +4,41 @@
 */
 'use strict';
 
-var inspect = require('util').inspect;
+const inspect = require('util').inspect;
 
-var assertValidGlobOpts = require('assert-valid-glob-opts');
-var arrayDiffer = require('array-differ');
-var fsCacheableRealpath = require('fs.realpath/old.js').realpath;
-var fsOriginalRealpath = require('graceful-fs').realpath;
-var Glob = require('glob').Glob;
-var makeAbs = require('glob/common.js').makeAbs;
-var objectAssign = require('object-assign');
-var Observable = require('zen-observable');
+const assertValidGlobOpts = require('assert-valid-glob-opts');
+const fsCacheableRealpath = require('fs.realpath/old.js').realpath;
+const fsOriginalRealpath = require('graceful-fs').realpath;
+const Glob = require('glob').Glob;
+const makeAbs = require('glob/common.js').makeAbs;
+const Observable = require('zen-observable');
 
 module.exports = function globObservable(pattern, options) {
-  return new Observable(function(observer) {
+  return new Observable(observer => {
     if (typeof pattern !== 'string') {
-      throw new TypeError('Expected a glob pattern string, but got ' + inspect(pattern) + '.');
+      throw new TypeError(`Expected a glob pattern string, but got ${inspect(pattern)}.`);
     }
 
     assertValidGlobOpts(options);
     options = options || {};
 
-    var realpath = options.realpath;
-    var unique = options.nounique !== true;
-    var realpathTasks = 0;
-    var completed = false;
-    var found = [];
-    var realpathFound = [];
+    const realpath = options.realpath;
+    const unique = options.nounique !== true;
+    let realpathTasks = 0;
+    let completed = false;
+    const found = new Set();
+    const realpathFound = new Set();
 
-    var glob = new Glob(pattern, objectAssign({
+    const glob = new Glob(pattern, Object.assign({
       silent: true,
       strict: true
     }, options, {realpath: false}));
 
-    var fsRealpath = options.realpathCache && Object.keys(options.realpathCache).length !== 0 ?
+    const fsRealpath = options.realpathCache && Object.keys(options.realpathCache).length !== 0 ?
                      fsCacheableRealpath :
                      fsOriginalRealpath;
 
-    var makeAbsOptions = {
+    const makeAbsOptions = {
       changedCwd: glob.changedCwd,
       cwd: glob.cwd,
       // glob.root affects the result of makeAbs
@@ -57,14 +55,14 @@ module.exports = function globObservable(pattern, options) {
     }
 
     function onMatch(match) {
-      var result = {cwd: glob.cwd};
+      const result = {cwd: glob.cwd};
 
       if (realpath) {
-        found.push(match);
+        found.add(match);
 
         realpathTasks += 1;
 
-        fsRealpath(match, glob.realpathCache, function(err, resolvedRealpath) {
+        fsRealpath(match, glob.realpathCache, (err, resolvedRealpath) => {
           realpathTasks -= 1;
 
           if (err) {
@@ -79,7 +77,7 @@ module.exports = function globObservable(pattern, options) {
           }
 
           if (unique) {
-            if (realpathFound.indexOf(resolvedRealpath) !== -1) {
+            if (realpathFound.has(resolvedRealpath)) {
               if (completed && realpathTasks === 0) {
                 observer.complete();
               }
@@ -87,7 +85,7 @@ module.exports = function globObservable(pattern, options) {
               return;
             }
 
-            realpathFound.push(resolvedRealpath);
+            realpathFound.add(resolvedRealpath);
           }
 
           result.path = resolvedRealpath;
@@ -107,11 +105,11 @@ module.exports = function globObservable(pattern, options) {
       }
 
       if (unique) {
-        if (found.indexOf(match) !== -1) {
+        if (found.has(match)) {
           return;
         }
 
-        found.push(match);
+        found.add(match);
       }
 
       result.path = match;
@@ -125,15 +123,16 @@ module.exports = function globObservable(pattern, options) {
 
     glob.on('match', onMatch);
 
-    glob.on('error', function(err) {
-      observer.error(err);
-    });
+    glob.on('error', err => observer.error(err));
 
-    glob.on('end', function(foundIncludingCached) {
+    glob.on('end', foundIncludingCached => {
       completed = true;
 
-      var cachedMatches = arrayDiffer(foundIncludingCached, found);
-      cachedMatches.forEach(onMatch);
+      for (const match of foundIncludingCached) {
+        if (!found.has(match)) {
+          onMatch(match);
+        }
+      }
 
       if (realpathTasks === 0) {
         observer.complete();
@@ -146,9 +145,7 @@ module.exports = function globObservable(pattern, options) {
       }
 
       // due to https://github.com/isaacs/node-glob/issues/279
-      setTimeout(function() {
-        glob.abort();
-      }, 4);
+      setTimeout(() => glob.abort(), 4);
     };
   });
 };

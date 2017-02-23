@@ -26,18 +26,16 @@
     "wrapper"
   ],
   "dependencies": {
-    "array-differ": "^1.0.0",
     "assert-valid-glob-opts": "^0.1.0",
     "fs.realpath": "^1.0.0",
     "glob": "^7.1.1",
     "graceful-fs": "^4.1.11",
-    "object-assign": "^4.1.1",
     "zen-observable": "^0.4.0"
   },
   "devDependencies": {
-    "@shinnn/eslint-config-node-legacy": "^3.0.0",
+    "@shinnn/eslint-config-node": "^3.0.0",
     "alpha-sort": "^2.0.0",
-    "eslint": "^3.15.0",
+    "eslint": "^3.16.1",
     "lnfs": "^3.0.0",
     "nyc": "^10.1.2",
     "rmfr": "^1.0.2",
@@ -46,6 +44,6 @@
     "unglobbable": "^1.0.0"
   },
   "eslintConfig": {
-    "extends": "@shinnn/node-legacy"
+    "extends": "@shinnn/node"
   }
 }
