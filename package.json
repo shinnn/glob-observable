@@ -1,12 +1,12 @@
 {
   "name": "glob-observable",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Observable-based glob",
   "repository": "shinnn/glob-observable",
   "author": "Shinnosuke Watanabe (https://github.com/shinnn)",
   "scripts": {
     "pretest": "eslint --fix --format=codeframe index.js test.js",
-    "test": "nyc node --throw-deprecation --harmony_async_await test.js"
+    "test": "nyc node --throw-deprecation test.js"
   },
   "license": "MIT",
   "files": [
