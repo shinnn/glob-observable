@@ -4,13 +4,13 @@
 */
 'use strict';
 
-const inspect = require('util').inspect;
+const {inspect} = require('util');
 
 const assertValidGlobOpts = require('assert-valid-glob-opts');
 const fsCacheableRealpath = require('fs.realpath/old.js').realpath;
 const fsOriginalRealpath = require('graceful-fs').realpath;
 const Glob = require('glob').Glob;
-const makeAbs = require('glob/common.js').makeAbs;
+const {makeAbs} = require('glob/common.js');
 const Observable = require('zen-observable');
 
 module.exports = function globObservable(pattern, options) {
@@ -35,8 +35,8 @@ module.exports = function globObservable(pattern, options) {
     }, options, {realpath: false}));
 
     const fsRealpath = options.realpathCache && Object.keys(options.realpathCache).length !== 0 ?
-                     fsCacheableRealpath :
-                     fsOriginalRealpath;
+      fsCacheableRealpath :
+      fsOriginalRealpath;
 
     const makeAbsOptions = {
       changedCwd: glob.changedCwd,

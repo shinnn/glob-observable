@@ -71,6 +71,7 @@ test('globObservable()', async t => {
       results.map(({path}) => path),
       [
         'node_modules',
+        'package-lock.json',
         'package.json',
         'test.js',
         'test.js',
@@ -166,7 +167,7 @@ test('globObservable()', async t => {
     error({message}) {
       t.strictEqual(
         message,
-        'Expected node-glob options to be an object, but got an array [ 1, 2 ].',
+        'Expected node-glob options to be an object, but got [ 1, 2 ] (array).',
         'should fail when the second argument is not a plain object.'
       );
     },

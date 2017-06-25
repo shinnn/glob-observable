@@ -26,19 +26,19 @@
     "wrapper"
   ],
   "dependencies": {
-    "assert-valid-glob-opts": "^0.1.0",
+    "assert-valid-glob-opts": "^1.0.0",
     "fs.realpath": "^1.0.0",
-    "glob": "^7.1.1",
+    "glob": "^7.1.2",
     "graceful-fs": "^4.1.11",
-    "zen-observable": "^0.4.0"
+    "zen-observable": "^0.5.2"
   },
   "devDependencies": {
-    "@shinnn/eslint-config-node": "^3.0.0",
-    "alpha-sort": "^2.0.0",
-    "eslint": "^3.16.1",
+    "@shinnn/eslint-config-node": "^4.0.0",
+    "alpha-sort": "^2.0.1",
+    "eslint": "^4.1.1",
     "lnfs": "^3.0.0",
-    "nyc": "^10.1.2",
-    "rmfr": "^1.0.2",
+    "nyc": "^11.0.2",
+    "rmfr": "^1.0.3",
     "slash": "^1.0.0",
     "tape": "^4.6.3",
     "unglobbable": "^1.0.0"
