@@ -1,6 +1,6 @@
 {
   "name": "glob-observable",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Observable-based glob",
   "repository": "shinnn/glob-observable",
   "author": "Shinnosuke Watanabe (https://github.com/shinnn)",
@@ -35,12 +35,12 @@
   "devDependencies": {
     "@shinnn/eslint-config-node": "^4.0.0",
     "alpha-sort": "^2.0.1",
-    "eslint": "^4.1.1",
+    "eslint": "^4.2.0",
     "lnfs": "^3.0.0",
-    "nyc": "^11.0.2",
+    "nyc": "^11.0.3",
     "rmfr": "^1.0.3",
     "slash": "^1.0.0",
-    "tape": "^4.6.3",
+    "tape": "^4.7.0",
     "unglobbable": "^1.0.0"
   },
   "eslintConfig": {
