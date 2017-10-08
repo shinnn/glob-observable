@@ -30,17 +30,17 @@
     "fs.realpath": "^1.0.0",
     "glob": "^7.1.2",
     "graceful-fs": "^4.1.11",
-    "zen-observable": "^0.5.2"
+    "zen-observable": "^0.6.0"
   },
   "devDependencies": {
-    "@shinnn/eslint-config-node": "^4.0.0",
+    "@shinnn/eslint-config-node": "^4.0.2",
     "alpha-sort": "^2.0.1",
-    "eslint": "^4.2.0",
-    "lnfs": "^3.0.0",
-    "nyc": "^11.0.3",
+    "eslint": "^4.8.0",
+    "lnfs": "^3.0.1",
+    "nyc": "^11.2.1",
     "rmfr": "^1.0.3",
     "slash": "^1.0.0",
-    "tape": "^4.7.0",
+    "tape": "^4.8.0",
     "unglobbable": "^1.0.0"
   },
   "eslintConfig": {
