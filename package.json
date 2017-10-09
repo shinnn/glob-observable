@@ -1,6 +1,6 @@
 {
   "name": "glob-observable",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Observable-based glob",
   "repository": "shinnn/glob-observable",
   "author": "Shinnosuke Watanabe (https://github.com/shinnn)",
