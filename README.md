@@ -1,6 +1,6 @@
 # glob-observable
 
-[![NPM version](https://img.shields.io/npm/v/glob-observable.svg)](https://www.npmjs.com/package/glob-observable)
+[![npm version](https://img.shields.io/npm/v/glob-observable.svg)](https://www.npmjs.com/package/glob-observable)
 [![Build Status](https://travis-ci.org/shinnn/glob-observable.svg?branch=master)](https://travis-ci.org/shinnn/glob-observable)
 [![Build status](https://ci.appveyor.com/api/projects/status/yqir32l963x2k4iv/branch/master?svg=true)](https://ci.appveyor.com/project/ShinnosukeWatanabe/glob-observable/branch/master)
 [![Coverage Status](https://img.shields.io/coveralls/shinnn/glob-observable.svg)](https://coveralls.io/github/shinnn/glob-observable?branch=master)
@@ -20,7 +20,7 @@ globObservable('*.js').subscribe({
 
 ## Installation
 
-[Use npm.](https://docs.npmjs.com/cli/install)
+[Use]((https://docs.npmjs.com/cli/install)) [npm](https://docs.npmjs.com/getting-started/what-is-npm).
 
 ```
 npm install glob-observable
@@ -34,7 +34,7 @@ const globObservable = require('glob-observable');
 
 ### globObservable(*pattern* [, *options*])
 
-*pattern*: `String` (glob pattern)  
+*pattern*: `string` (glob pattern)  
 *options*: `Object` ([`glob` options](https://github.com/isaacs/node-glob#options) with `strict` and `silent` default to `true`)  
 Return: [`Observable`](https://github.com/tc39/proposal-observable#observable) ([zenparsing's implementation](https://github.com/zenparsing/zen-observable))
 
@@ -48,13 +48,13 @@ Each result object has the following properties:
 
 ##### cwd
 
-Type: `String`
+Type: `string`
 
 The current working directory where to search.
 
 ##### path
 
-Type: `String`
+Type: `string`
 
 The path of matched file or directory.
 
@@ -77,12 +77,10 @@ const subscription = observable.subscribe(result => {
   result.stat.isDirectory(); //=> false
 });
 
-// You can abort matching t any time.
+// You can abort matching at any time.
 subscription.unsubscribe();
 ```
 
 ## License
 
-Copyright (c) 2017 [Shinnosuke Watanabe](https://github.com/shinnn)
-
-Licensed under [the MIT License](./LICENSE).
+[ISC License](./LICENSE) © 2017 Shinnosuke Watanabe
