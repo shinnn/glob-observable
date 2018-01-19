@@ -14,138 +14,138 @@ const {makeAbs} = require('glob/common.js');
 const Observable = require('zen-observable');
 
 module.exports = function globObservable(pattern, options) {
-  return new Observable(observer => {
-    if (typeof pattern !== 'string') {
-      throw new TypeError(`Expected a glob pattern string, but got ${inspect(pattern)}.`);
-    }
+	return new Observable(observer => {
+		if (typeof pattern !== 'string') {
+			throw new TypeError(`Expected a glob pattern string, but got ${inspect(pattern)}.`);
+		}
 
-    assertValidGlobOpts(options);
-    options = options || {};
+		assertValidGlobOpts(options);
+		options = options || {};
 
-    const realpath = options.realpath;
-    const unique = options.nounique !== true;
-    let realpathTasks = 0;
-    let completed = false;
-    const found = new Set();
-    const realpathFound = new Set();
+		const realpath = options.realpath;
+		const unique = options.nounique !== true;
+		let realpathTasks = 0;
+		let completed = false;
+		const found = new Set();
+		const realpathFound = new Set();
 
-    const glob = new Glob(pattern, Object.assign({
-      silent: true,
-      strict: true
-    }, options, {realpath: false}));
+		const glob = new Glob(pattern, Object.assign({
+			silent: true,
+			strict: true
+		}, options, {realpath: false}));
 
-    const fsRealpath = options.realpathCache && Object.keys(options.realpathCache).length !== 0 ?
-      fsCacheableRealpath :
-      fsOriginalRealpath;
+		const fsRealpath = options.realpathCache && Object.keys(options.realpathCache).length !== 0 ?
+			fsCacheableRealpath :
+			fsOriginalRealpath;
 
-    const makeAbsOptions = {
-      changedCwd: glob.changedCwd,
-      cwd: glob.cwd,
-      // glob.root affects the result of makeAbs
-      // https://github.com/isaacs/node-glob/blob/v7.1.1/common.js#L206
-      root: ''
-    };
+		const makeAbsOptions = {
+			changedCwd: glob.changedCwd,
+			cwd: glob.cwd,
+			// glob.root affects the result of makeAbs
+			// https://github.com/isaacs/node-glob/blob/v7.1.1/common.js#L206
+			root: ''
+		};
 
-    function makeAbsIfNeeded(filePath) {
-      if (options.absolute) {
-        return filePath;
-      }
+		function makeAbsIfNeeded(filePath) {
+			if (options.absolute) {
+				return filePath;
+			}
 
-      return makeAbs(makeAbsOptions, filePath);
-    }
+			return makeAbs(makeAbsOptions, filePath);
+		}
 
-    function onMatch(match) {
-      const result = {cwd: glob.cwd};
+		function onMatch(match) {
+			const result = {cwd: glob.cwd};
 
-      if (realpath) {
-        found.add(match);
+			if (realpath) {
+				found.add(match);
 
-        realpathTasks += 1;
+				realpathTasks += 1;
 
-        fsRealpath(match, glob.realpathCache, (err, resolvedRealpath) => {
-          realpathTasks -= 1;
+				fsRealpath(match, glob.realpathCache, (err, resolvedRealpath) => {
+					realpathTasks -= 1;
 
-          if (err) {
-            if (err.syscall !== 'stat') {
-              observer.error(err);
-              return;
-            }
+					if (err) {
+						if (err.syscall !== 'stat') {
+							observer.error(err);
+							return;
+						}
 
-            resolvedRealpath = makeAbsIfNeeded(match);
-          } else {
-            resolvedRealpath = makeAbs(makeAbsOptions, resolvedRealpath);
-          }
+						resolvedRealpath = makeAbsIfNeeded(match);
+					} else {
+						resolvedRealpath = makeAbs(makeAbsOptions, resolvedRealpath);
+					}
 
-          if (unique) {
-            if (realpathFound.has(resolvedRealpath)) {
-              if (completed && realpathTasks === 0) {
-                observer.complete();
-              }
+					if (unique) {
+						if (realpathFound.has(resolvedRealpath)) {
+							if (completed && realpathTasks === 0) {
+								observer.complete();
+							}
 
-              return;
-            }
+							return;
+						}
 
-            realpathFound.add(resolvedRealpath);
-          }
+						realpathFound.add(resolvedRealpath);
+					}
 
-          result.path = resolvedRealpath;
+					result.path = resolvedRealpath;
 
-          if (options.stat) {
-            result.stat = glob.statCache[resolvedRealpath];
-          }
+					if (options.stat) {
+						result.stat = glob.statCache[resolvedRealpath];
+					}
 
-          observer.next(result);
+					observer.next(result);
 
-          if (completed && realpathTasks === 0) {
-            observer.complete();
-          }
-        });
+					if (completed && realpathTasks === 0) {
+						observer.complete();
+					}
+				});
 
-        return;
-      }
+				return;
+			}
 
-      if (unique) {
-        if (found.has(match)) {
-          return;
-        }
+			if (unique) {
+				if (found.has(match)) {
+					return;
+				}
 
-        found.add(match);
-      }
+				found.add(match);
+			}
 
-      result.path = match;
+			result.path = match;
 
-      if (options.stat) {
-        result.stat = glob.statCache[makeAbsIfNeeded(match)];
-      }
+			if (options.stat) {
+				result.stat = glob.statCache[makeAbsIfNeeded(match)];
+			}
 
-      observer.next(result);
-    }
+			observer.next(result);
+		}
 
-    glob.on('match', onMatch);
+		glob.on('match', onMatch);
 
-    glob.on('error', err => observer.error(err));
+		glob.on('error', err => observer.error(err));
 
-    glob.on('end', foundIncludingCached => {
-      completed = true;
+		glob.on('end', foundIncludingCached => {
+			completed = true;
 
-      for (const match of foundIncludingCached) {
-        if (!found.has(match)) {
-          onMatch(match);
-        }
-      }
+			for (const match of foundIncludingCached) {
+				if (!found.has(match)) {
+					onMatch(match);
+				}
+			}
 
-      if (realpathTasks === 0) {
-        observer.complete();
-      }
-    });
+			if (realpathTasks === 0) {
+				observer.complete();
+			}
+		});
 
-    return function abortGlob() {
-      if (completed) {
-        return;
-      }
+		return function abortGlob() {
+			if (completed) {
+				return;
+			}
 
-      // due to https://github.com/isaacs/node-glob/issues/279
-      setTimeout(() => glob.abort(), 4);
-    };
-  });
+			// due to https://github.com/isaacs/node-glob/issues/279
+			setTimeout(() => glob.abort(), 4);
+		};
+	});
 };
