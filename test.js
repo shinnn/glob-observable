@@ -15,7 +15,7 @@ const dummyFileStat = new Stats(1000000, 33188, 1, 501, 20, 0, 4096, 500000, 1, 
 const dummyFilePath = slash(resolve('__actually_this_file_does_not_exist__'));
 
 test('globObservable()', async t => {
-	t.plan(13);
+	t.plan(15);
 
 	await rmfr('tmp');
 	await Promise.all([
@@ -182,6 +182,30 @@ test('globObservable()', async t => {
 				'`sync` option is deprecated and there’s no need to pass any values ' +
         'to that option, but true was provided.',
 				'should fail when the depreacted option is used.'
+			);
+		},
+		complete: unexpectedComplete
+	});
+
+	globObservable()
+	.subscribe({
+		error({message}) {
+			t.equal(
+				message,
+				'Expected 1 or 2 arguments (<string>[, <Object>]), but got no arguments.',
+				'should fail when it takes no arguments.'
+			);
+		},
+		complete: unexpectedComplete
+	});
+
+	globObservable('', {}, '')
+	.subscribe({
+		error({message}) {
+			t.equal(
+				message,
+				'Expected 1 or 2 arguments (<string>[, <Object>]), but got 3 arguments.',
+				'should fail when it takes too many arguments.'
 			);
 		},
 		complete: unexpectedComplete

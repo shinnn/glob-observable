@@ -1,7 +1,3 @@
-/*!
- * glob-observable | MIT (c) Shinnosuke Watanabe
- * https://github.com/shinnn/glob-observable
-*/
 'use strict';
 
 const {inspect} = require('util');
@@ -13,14 +9,27 @@ const Glob = require('glob').Glob;
 const {makeAbs} = require('glob/common.js');
 const Observable = require('zen-observable');
 
-module.exports = function globObservable(pattern, options) {
+module.exports = function globObservable(...args) {
 	return new Observable(observer => {
+		const argLen = args.length;
+
+		if (argLen !== 1 && argLen !== 2) {
+			throw new RangeError(`Expected 1 or 2 arguments (<string>[, <Object>]), but got ${
+				argLen === 0 ? 'no' : argLen
+			} arguments.`);
+		}
+
+		const [pattern] = args;
+
 		if (typeof pattern !== 'string') {
 			throw new TypeError(`Expected a glob pattern string, but got ${inspect(pattern)}.`);
 		}
 
-		assertValidGlobOpts(options);
-		options = options || {};
+		if (argLen === 2) {
+			assertValidGlobOpts(args[1]);
+		}
+
+		const options = args[1] || {};
 
 		const realpath = options.realpath;
 		const unique = options.nounique !== true;
