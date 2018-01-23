@@ -155,7 +155,7 @@ test('globObservable()', async t => {
 		error({message}) {
 			t.equal(
 				message,
-				'Expected a glob pattern string, but got <Buffer 68 69>.',
+				'Expected a glob pattern (<string>), but got a non-string value <Buffer 68 69>.',
 				'should fail when it takes a non-string glob pattern.'
 			);
 		},

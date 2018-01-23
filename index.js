@@ -1,11 +1,10 @@
 'use strict';
 
-const {inspect} = require('util');
-
 const assertValidGlobOpts = require('assert-valid-glob-opts');
 const fsCacheableRealpath = require('fs.realpath/old.js').realpath;
 const fsOriginalRealpath = require('graceful-fs').realpath;
-const Glob = require('glob').Glob;
+const {Glob} = require('glob');
+const inspectWithKind = require('inspect-with-kind');
 const {makeAbs} = require('glob/common.js');
 const Observable = require('zen-observable');
 
@@ -22,7 +21,9 @@ module.exports = function globObservable(...args) {
 		const [pattern] = args;
 
 		if (typeof pattern !== 'string') {
-			throw new TypeError(`Expected a glob pattern string, but got ${inspect(pattern)}.`);
+			throw new TypeError(`Expected a glob pattern (<string>), but got a non-string value ${
+				inspectWithKind(pattern)
+			}.`);
 		}
 
 		if (argLen === 2) {
@@ -51,7 +52,7 @@ module.exports = function globObservable(...args) {
 			changedCwd: glob.changedCwd,
 			cwd: glob.cwd,
 			// glob.root affects the result of makeAbs
-			// https://github.com/isaacs/node-glob/blob/v7.1.1/common.js#L206
+			// https://github.com/isaacs/node-glob/blob/v7.1.2/common.js#L206
 			root: ''
 		};
 
