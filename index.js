@@ -39,10 +39,12 @@ module.exports = function globObservable(...args) {
 		const found = new Set();
 		const realpathFound = new Set();
 
-		const glob = new Glob(pattern, Object.assign({
+		const glob = new Glob(pattern, {
 			silent: true,
-			strict: true
-		}, options, {realpath: false}));
+			strict: true,
+			...options,
+			realpath: false
+		});
 
 		const fsRealpath = options.realpathCache && Object.keys(options.realpathCache).length !== 0 ?
 			fsCacheableRealpath :
